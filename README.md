@@ -123,17 +123,46 @@ POST   /api/sensors/:id/readings    - Enviar lectura de sensor (IoT)
 GET    /api/alerts                  - Obtener alertas
 POST   /api/inventory/transactions  - Registrar transacción de inventario
 POST   /api/reports/sensor-data     - Generar reporte
+GET    /health                      - Health check del sistema
+GET    /metrics                     - Métricas del sistema
 ```
 
 Ver [API Documentation](docs/API.md) para la lista completa.
 
-## 🔐 Seguridad
+## 🔐 Seguridad y Buenas Prácticas
 
-- Autenticación JWT
+### Seguridad
+- Autenticación JWT con manejo robusto de tokens
 - Contraseñas hasheadas (bcrypt)
 - Validación de datos (Joi)
-- Protección CORS
+- Protección CORS configurable
 - Variables de entorno para secretos
+- Helmet.js para headers de seguridad
+- Rate limiting para protección contra DDoS
+- Validación estricta de variables de entorno
+- Límites de tamaño en request body
+
+### Resiliencia
+- Reintentos automáticos en conexiones de BD
+- Graceful shutdown para zero-downtime deploys
+- Connection pooling optimizado (2-20 conexiones)
+- Circuit breaker para manejo de fallos
+- Request timeout (30s)
+- Statement timeout en queries (30s)
+
+### Observabilidad
+- Structured logging con Winston
+- Request correlation IDs para trazabilidad
+- Health checks con estado de dependencias
+- Endpoint de métricas para monitoreo
+- Logging mejorado de errores con contexto
+
+### Performance
+- Compresión HTTP (reduce bandwidth 70%)
+- Connection pooling eficiente
+- Respuestas optimizadas
+
+Ver [Documentación de Buenas Prácticas](docs/BEST_PRACTICES.md) para detalles completos.
 
 ## 📈 Roadmap - Fase 2 (Automatización)
 
