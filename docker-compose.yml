@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: fishery_postgres
+    environment:
+      POSTGRES_DB: fishery_monitoring
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - fishery_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fishery_backend
+    environment:
+      NODE_ENV: production
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: fishery_monitoring
+      DB_USER: postgres
+      DB_PASSWORD: postgres_password
+      PORT: 3000
+      JWT_SECRET: your_secret_key_change_in_production
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - fishery_network
+    restart: unless-stopped
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: fishery_frontend
+    environment:
+      REACT_APP_API_URL: http://localhost:3000/api
+      REACT_APP_SOCKET_URL: http://localhost:3000
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend
+    networks:
+      - fishery_network
+    restart: unless-stopped
+
+  # MQTT Broker (for IoT sensors)
+  mqtt:
+    image: eclipse-mosquitto:2
+    container_name: fishery_mqtt
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mqtt/config:/mosquitto/config
+      - mqtt_data:/mosquitto/data
+      - mqtt_logs:/mosquitto/log
+    networks:
+      - fishery_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  mqtt_data:
+  mqtt_logs:
+
+networks:
+  fishery_network:
+    driver: bridge
