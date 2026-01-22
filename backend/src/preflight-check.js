@@ -74,9 +74,9 @@ if (fs.existsSync(envPath)) {
     log.success('JWT_SECRET length is adequate (>= 32 chars)');
   }
   
-  // Warn about default values
-  if (process.env.JWT_SECRET === 'your_jwt_secret_key_here' || 
-      process.env.JWT_SECRET === 'default_secret_key') {
+  // Warn about default or example values
+  if (process.env.JWT_SECRET === 'your_jwt_secret_key_here_must_be_at_least_32_characters_long' || 
+      process.env.JWT_SECRET === 'change_this_secret_key_in_production_min_32_chars_required_for_security') {
     log.warn('JWT_SECRET appears to be a default value - change it in production!');
   }
   
