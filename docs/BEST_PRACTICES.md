@@ -10,6 +10,7 @@ Este documento describe las mejores prácticas de programación implementadas en
 - **Implementado**: Protección automática contra vulnerabilidades web comunes
 - **Beneficio**: Añade headers HTTP de seguridad (CSP, XSS Protection, etc.)
 - **Impacto**: Reduce superficie de ataque sin costo de desarrollo adicional
+- **Nota**: CSP (Content Security Policy) y COEP están deshabilitados porque este es un backend API-only. Estas políticas son para proteger navegadores que renderizan HTML/JS, no aplicables a REST APIs.
 
 ### 1.2 Rate Limiting
 - **Implementado**: Límite de 100 requests por IP cada 15 minutos

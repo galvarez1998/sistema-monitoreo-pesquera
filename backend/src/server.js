@@ -47,10 +47,13 @@ const io = socketIo(server, {
 // Trust proxy (important for rate limiting behind reverse proxy)
 app.set('trust proxy', 1);
 
-// Security middleware
+// Security middleware with Helmet
+// Note: CSP and COEP are disabled because this is an API-only backend.
+// These policies are primarily for protecting browsers rendering HTML/JS,
+// which is not the case for REST APIs. All other security headers are enabled.
 app.use(helmet({
-  contentSecurityPolicy: false, // Disable for API
-  crossOriginEmbedderPolicy: false
+  contentSecurityPolicy: false, // Not applicable for API-only backend
+  crossOriginEmbedderPolicy: false // Not applicable for API-only backend
 }));
 
 // Compression middleware
