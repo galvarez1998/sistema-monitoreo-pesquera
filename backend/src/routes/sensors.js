@@ -2,6 +2,22 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
 
+/**
+ * Generate alert message based on threshold violation
+ * @param {string} sensorType - Type of sensor
+ * @param {number} value - Current value
+ * @param {number} threshold - Threshold value
+ * @param {string} unit - Unit of measurement
+ * @param {string} alertType - Type of alert (high/low)
+ * @returns {string} Alert message
+ */
+function generateAlertMessage(sensorType, value, threshold, unit, alertType) {
+  const comparison = alertType === 'high' ? '>' : '<';
+  const thresholdType = alertType === 'high' ? 'máximo' : 'mínimo';
+  
+  return `${sensorType} está por ${alertType === 'high' ? 'encima' : 'debajo'} del umbral ${thresholdType} (${value} ${unit} ${comparison} ${threshold} ${unit})`;
+}
+
 // Get all sensors
 router.get('/', async (req, res) => {
   try {
@@ -152,10 +168,10 @@ router.post('/:id/readings', async (req, res) => {
       
       if (threshold.min_value !== null && value < threshold.min_value) {
         alertType = 'low';
-        message = `${sensor.sensor_type} está por debajo del umbral mínimo (${value} ${sensor.unit} < ${threshold.min_value} ${sensor.unit})`;
+        message = generateAlertMessage(sensor.sensor_type, value, threshold.min_value, sensor.unit, 'low');
       } else if (threshold.max_value !== null && value > threshold.max_value) {
         alertType = 'high';
-        message = `${sensor.sensor_type} está por encima del umbral máximo (${value} ${sensor.unit} > ${threshold.max_value} ${sensor.unit})`;
+        message = generateAlertMessage(sensor.sensor_type, value, threshold.max_value, sensor.unit, 'high');
       }
       
       if (alertType) {

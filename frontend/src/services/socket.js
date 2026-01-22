@@ -24,6 +24,10 @@ export const connectSocket = () => {
 
 export const disconnectSocket = () => {
   if (socket) {
+    // Remove all event listeners to prevent memory leaks
+    socket.off('sensor_reading');
+    socket.off('new_alert');
+    socket.off('alert_resolved');
     socket.disconnect();
     socket = null;
   }

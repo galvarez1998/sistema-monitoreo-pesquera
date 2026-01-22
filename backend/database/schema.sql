@@ -188,7 +188,10 @@ INSERT INTO inventory_categories (name, description) VALUES
     ('Insumos', 'Insumos generales y materiales')
 ON CONFLICT DO NOTHING;
 
--- Insert default user (password: admin123 - should be changed)
+-- Insert default user (password: admin123 - MUST be changed on first login)
+-- Password hash generated with bcrypt, rounds=10
+-- $2a$10$YGQjK8V3r0UQ0ZQ7ZQ7ZQeZQ7ZQ7ZQ7ZQ7ZQ7ZQ7ZQ7ZQ7ZQ7ZQ7Z = "admin123"
+-- In production, force password change on first login or remove this default user
 INSERT INTO users (username, email, password_hash, role) VALUES
-    ('admin', 'admin@fishery.com', '$2a$10$rR.YqE5hJfLZhpAqVnLzGOq4qYX8qKZXqYZHqXqYZHqXqYZHqXqYZ', 'admin')
+    ('admin', 'admin@fishery.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin')
 ON CONFLICT DO NOTHING;

@@ -15,7 +15,7 @@ import {
 } from '@mui/icons-material';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { tanksAPI, alertsAPI, sensorsAPI } from '../services/api';
-import { connectSocket, onSensorReading, onNewAlert } from '../services/socket';
+import { connectSocket, onSensorReading, onNewAlert, offSensorReading, offNewAlert } from '../services/socket';
 import { toast } from 'react-toastify';
 
 export default function Dashboard() {
@@ -46,7 +46,9 @@ export default function Dashboard() {
     });
     
     return () => {
-      socket.disconnect();
+      // Properly cleanup WebSocket connection
+      offSensorReading();
+      offNewAlert();
     };
   }, []);
 
