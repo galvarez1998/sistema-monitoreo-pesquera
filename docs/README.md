@@ -291,6 +291,13 @@ docker logs fishery_frontend
 docker logs fishery_postgres
 ```
 
+## 📚 Documentación Adicional
+
+- **[API Documentation](API.md)** - Referencia completa de endpoints
+- **[Installation Guide](INSTALLATION.md)** - Guía de instalación detallada
+- **[IoT Setup](IOT_SETUP.md)** - Configuración de sensores IoT
+- **[Best Practices](BEST_PRACTICES.md)** - Mejores prácticas de programación implementadas
+
 ## 🤝 Soporte y Contribuciones
 
 Para reportar problemas o sugerir mejoras, crear un issue en el repositorio.

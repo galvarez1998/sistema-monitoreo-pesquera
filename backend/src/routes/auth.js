@@ -59,10 +59,15 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
     
+    // Ensure JWT_SECRET is configured
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET not configured');
+    }
+    
     // Generate JWT token
     const token = jwt.sign(
       { id: user.id, username: user.username, role: user.role },
-      process.env.JWT_SECRET || 'default_secret_key',
+      process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRE || '24h' }
     );
     
@@ -91,7 +96,11 @@ router.get('/me', async (req, res) => {
       return res.status(401).json({ error: 'No token provided' });
     }
     
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default_secret_key');
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET not configured');
+    }
+    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
     const result = await db.query(
       'SELECT id, username, email, role, phone, created_at FROM users WHERE id = $1',

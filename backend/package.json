@@ -7,7 +7,9 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "test": "jest --coverage",
-    "migrate": "node src/database/migrate.js"
+    "migrate": "node src/database/migrate.js",
+    "preflight": "node src/preflight-check.js",
+    "start:safe": "npm run preflight && npm start"
   },
   "keywords": [
     "fishery",
@@ -31,7 +33,11 @@
     "joi": "^17.11.0",
     "moment": "^2.29.4",
     "exceljs": "^4.4.0",
-    "pdfkit": "^0.13.0"
+    "pdfkit": "^0.13.0",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "compression": "^1.7.4",
+    "express-validator": "^7.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.2",
